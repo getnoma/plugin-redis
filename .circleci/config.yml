@@ -1,0 +1,26 @@
+version: 2.1
+
+workflows:
+  main:
+    jobs:
+      - test:
+          version: "14"
+
+jobs:
+  test:
+    parameters:
+      version:
+        type: string
+    docker:
+      - image: circleci/node:<< parameters.version >>
+      - image: circleci/mongo:4.4.4
+      - image: circleci/redis:6.2.0
+      - image: rabbitmq:3.8
+    steps:
+      - checkout
+      - run:
+          name: "NPM Install"
+          command: npm install
+      - run:
+          name: "NPM Test"
+          command: npm test
